@@ -126,8 +126,8 @@ echo -e "${GREEN}  Found $count GPUs on PCIe bus${NC}"
 echo -e "${YELLOW}  First ReBAR pass...${NC}"
 restore_rebar
 
-echo -e "${YELLOW}  FLR pass on 5060 Ti GPUs to clear WPR2...${NC}"
-for bdf in $(lspci -Dnn | awk '/NVIDIA/ && /10de:2d04/ && /VGA/ {print $1}'); do
+echo -e "${YELLOW}  FLR pass on all NVIDIA GPUs to clear WPR2...${NC}"
+for bdf in $(lspci -Dnn | awk '/NVIDIA/ && /10de:/ && /VGA|3D/ {print $1}'); do
     if [ -f "/sys/bus/pci/devices/${bdf}/reset" ]; then
         echo "  - FLR $bdf"
         echo 1 > "/sys/bus/pci/devices/${bdf}/reset" 2>/dev/null || true
@@ -164,7 +164,7 @@ echo -e "${YELLOW}==================================================${NC}"
 target_gpu_count=0
 smi_target_count=0
 smi_bdfs=$(nvidia-smi --query-gpu=pci.bus_id --format=csv,noheader 2>/dev/null | tr 'A-F' 'a-f' | sed 's/^00000000:/0000:/' || true)
-for bdf in $(lspci -Dnn | awk '/NVIDIA/ && /10de:2d04/ && /VGA/ {print $1}'); do
+for bdf in $(lspci -Dnn | awk '/NVIDIA/ && /10de:/ && /VGA|3D/ {print $1}'); do
     target_gpu_count=$((target_gpu_count + 1))
     if echo "$smi_bdfs" | grep -qx "$bdf"; then
         smi_target_count=$((smi_target_count + 1))
