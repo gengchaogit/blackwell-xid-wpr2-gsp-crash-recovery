@@ -1,5 +1,6 @@
 # Blackwell Xid 154 / WPR2 / GSP Crash Recovery
 
+[English](README.md) | [中文](README_zh.md)
 A robust, automated recovery script designed to revive NVIDIA Blackwell architecture GPUs (RTX 5090, 5080, 5070, 5060 Ti, PRO 6000, etc.) from GSP heartbeat timeouts and watchdog lockups **without requiring a system reboot**.
 
 ## The Problem
