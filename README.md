@@ -56,17 +56,25 @@ This repository provides a bash script (`sbr_recover.sh`) that serves as the mis
 2. **Kills Processes & Removes Devices**: Stops all processes using the GPU and forcefully removes the PCIe devices from the kernel (`echo 1 > remove`).
 3. **Unloads Modules**: Unloads the monolithic `nvidia` kernel modules.
 4. **SBR Reset**: Performs a **Secondary Bus Reset (SBR)** via `setpci` on the upstream bridges, successfully clearing the locked WPR2 region.
-5. **Rescans & Reloads**: Rescans the PCIe bus and reloads the drivers.
+5. **Universal ReBAR Recovery**: Rescans the PCIe bus and invokes `native_resize_bar.sh`, which dynamically probes hardware capabilities and applies the absolute maximum BAR size (e.g., 16GB for 5060 Ti, 128GB for PRO 6000) via the kernel `resourceX_resize` sysfs interface.
+6. **Universal Verification**: Parses kernel bus structures via `lspci -v` to ensure CPU-side PCI physical memory allocations match the Gigabyte demands of every card. 
+7. **Reloads & Binds Drivers**: Reloads the drivers and manually patches udev blindspots by hard-binding the reset devices back to the `nvidia` driver.
 
 ## Usage
 When your GPU drops from the bus or `nvidia-smi` hangs indefinitely, simply run the script as root:
+
 ```bash
+# Ensure the scripts have executable permissions
+chmod +x *.sh
+
+# Execute the recovery script
 sudo ./sbr_recover.sh
 ```
-In about 10 seconds, all dropped GPUs will be recovered and fully functional again.
+In about 15 seconds, all dropped GPUs will be recovered and fully functional again.
 
-> **Note for Custom ReBAR Setups**: If you are using a motherboard that does NOT support native ReBAR (like some Gigabyte or older Xeon boards) and rely on a kernel patch (e.g. `rebar_mod`) to spoof 16GB BARs, you **must** insert your `rebar_mod` invocation right after the PCI rescan step in this script. The hardware SBR will revert the BAR size to its VBIOS default (usually 256MB), and the driver will crash upon loading if the BAR isn't stretched back out first. 
-> For native ReBAR motherboards (like AMD EPYC), the script works perfectly out of the box.
+> **Note on ReBAR / Large BAR Support**: 
+> This project relies entirely on **Linux Kernel 6.8+ (Ubuntu 24.04)** native dynamic PCIe resizing.
+> Instead of using legacy tools like `rebar_mod`, this script parses the hex offsets of your GPU's actual hardware capability matrix to calculate its maximum supported BAR size index (e.g. `14` for 16GB, `17` for 128GB) and natively writes it into the `sysfs` tree. It guarantees 100% stable, universal adaptation to any NVIDIA model.
 
 ## Credits
 Immense thanks to the contributors of [open-gpu-kernel-modules #1080](https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1080), specifically @Loong0x00 and @ndizazzo, whose reverse engineering of the GSP firmware and TLB invalidation queues uncovered the root cause and conceptualized the manual userspace SBR workaround.
