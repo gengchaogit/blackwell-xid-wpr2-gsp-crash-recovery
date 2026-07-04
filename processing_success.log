@@ -1,0 +1,133 @@
+(base) root@epyc:~# ./sbr_recover.sh
+==================================================
+  Blackwell SBR GPU Recovery Script
+==================================================
+[1/7] Collecting upstream PCIe bridges for NVIDIA GPUs...
+  Found bridges: 0000:00:01.1 0000:40:01.1 0000:40:01.3 0000:80:01.1 0000:80:01.3 0000:a0:01.1 0000:a0:01.3 0000:e0:01.1 0000:e0:01.3
+[2/7] Stopping all GPU processes...
+[3/7] Unloading NVIDIA driver modules...
+[4/7] Removing all NVIDIA PCIe devices...
+[5/7] Performing Secondary Bus Reset (SBR) on upstream bridges to clear WPR2...
+  - SBR on bridge 0000:00:01.1
+  - SBR on bridge 0000:40:01.1
+  - SBR on bridge 0000:40:01.3
+  - SBR on bridge 0000:80:01.1
+  - SBR on bridge 0000:80:01.3
+  - SBR on bridge 0000:a0:01.1
+  - SBR on bridge 0000:a0:01.3
+  - SBR on bridge 0000:e0:01.1
+  - SBR on bridge 0000:e0:01.3
+[6/7] Rescanning PCIe bus, clearing WPR2, and restoring ReBAR...
+  Found 9 GPUs on PCIe bus
+  First ReBAR pass...
+  Running native PCI BAR resize...
+Starting native sysfs PCI BAR resize (Dynamic Mode)...
+
+Found NVIDIA GPU at 0000:01:00.0 (Device ID: 0x2bb1)
+  Unbinding driver for 0000:01:00.0...
+  Dynamically detected max BAR index 17 for resource2_resize.
+
+Found NVIDIA GPU at 0000:41:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:41:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:42:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:42:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:81:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:81:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:82:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:82:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:a1:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:a1:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:a2:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:a2:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:e1:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:e1:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:e2:00.0 (Device ID: 0x2d04)
+  Unbinding driver for 0000:e2:00.0...
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Done. Check lspci -v to verify Memory at ... [size=...].
+  FLR pass on 5060 Ti GPUs to clear WPR2...
+  - FLR 0000:41:00.0
+  - FLR 0000:42:00.0
+  - FLR 0000:81:00.0
+  - FLR 0000:82:00.0
+  - FLR 0000:a1:00.0
+  - FLR 0000:a2:00.0
+  - FLR 0000:e1:00.0
+  - FLR 0000:e2:00.0
+  Second ReBAR pass after FLR...
+  Running native PCI BAR resize...
+Starting native sysfs PCI BAR resize (Dynamic Mode)...
+
+Found NVIDIA GPU at 0000:01:00.0 (Device ID: 0x2bb1)
+  Dynamically detected max BAR index 17 for resource2_resize.
+
+Found NVIDIA GPU at 0000:41:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:42:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:81:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:82:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:a1:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:a2:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:e1:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Found NVIDIA GPU at 0000:e2:00.0 (Device ID: 0x2d04)
+  Dynamically detected max BAR index 14 for resource1_resize.
+
+Done. Check lspci -v to verify Memory at ... [size=...].
+  0000:01:00.0: Physical BAR size dynamically verified at 128G.
+  0000:41:00.0: Physical BAR size dynamically verified at 16G.
+  0000:42:00.0: Physical BAR size dynamically verified at 16G.
+  0000:81:00.0: Physical BAR size dynamically verified at 16G.
+  0000:82:00.0: Physical BAR size dynamically verified at 16G.
+  0000:a1:00.0: Physical BAR size dynamically verified at 16G.
+  0000:a2:00.0: Physical BAR size dynamically verified at 16G.
+  0000:e1:00.0: Physical BAR size dynamically verified at 16G.
+  0000:e2:00.0: Physical BAR size dynamically verified at 16G.
+[7/7] Loading NVIDIA driver...
+==================================================
+GPU 0: NVIDIA RTX PRO 6000 Blackwell Workstation Edition (UUID: GPU-2c2efb73-4c9b-1cdf-85ee-b702e4e245de)
+GPU 1: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-0a2e947e-1443-a746-c069-2f872e6dbb5f)
+GPU 2: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-a6f702bd-a80a-8cb4-604d-b0da17f9cd14)
+GPU 3: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-c7cb828a-e403-19fc-2f68-4772290faae8)
+GPU 4: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-ef1a5346-5425-3816-0b2e-417142fafb71)
+GPU 5: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-3c312090-433f-77b6-71fa-a4bb8dc90518)
+GPU 6: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-5bb459aa-e589-2e69-c7ab-d6bce12da11c)
+GPU 7: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-309b9765-5cce-5f90-f069-bba1b9bf54d6)
+GPU 8: NVIDIA GeForce RTX 5060 Ti (UUID: GPU-37324d8a-fc29-05ac-7538-95f4cd7f7851)
+  0000:01:00.0: Physical BAR size dynamically verified at 128G.
+  0000:41:00.0: Physical BAR size dynamically verified at 16G.
+  0000:42:00.0: Physical BAR size dynamically verified at 16G.
+  0000:81:00.0: Physical BAR size dynamically verified at 16G.
+  0000:82:00.0: Physical BAR size dynamically verified at 16G.
+  0000:a1:00.0: Physical BAR size dynamically verified at 16G.
+  0000:a2:00.0: Physical BAR size dynamically verified at 16G.
+  0000:e1:00.0: Physical BAR size dynamically verified at 16G.
+  0000:e2:00.0: Physical BAR size dynamically verified at 16G.
+✓ SBR Recovery Successful!
