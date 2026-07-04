@@ -56,7 +56,7 @@ This repository provides a bash script (`sbr_recover.sh`) that serves as the mis
 1. **Discovers Topology**: Gathers the upstream PCIe bridges of all NVIDIA GPUs on the system.
 2. **Kills Processes & Removes Devices**: Stops all processes using the GPU and forcefully removes the PCIe devices from the kernel (`echo 1 > remove`).
 3. **Unloads Modules**: Unloads the monolithic `nvidia` kernel modules.
-4. **SBR Reset**: Performs a **Secondary Bus Reset (SBR)** via `setpci` on the upstream bridges, successfully clearing the locked WPR2 region.
+4. **SBR & FLR Reset**: Performs a **Secondary Bus Reset (SBR)** on the upstream bridges followed by a **Function Level Reset (FLR)** on all NVIDIA devices, successfully clearing the locked WPR2 region across all GPU variants.
 5. **Universal ReBAR Recovery**: Rescans the PCIe bus and invokes `native_resize_bar.sh`, which dynamically probes hardware capabilities and applies the absolute maximum BAR size (e.g., 16GB for 5060 Ti, 128GB for PRO 6000) via the kernel `resourceX_resize` sysfs interface.
 6. **Universal Verification**: Parses kernel bus structures via `lspci -v` to ensure CPU-side PCI physical memory allocations match the Gigabyte demands of every card. 
 7. **Reloads & Binds Drivers**: Reloads the drivers and manually patches udev blindspots by hard-binding the reset devices back to the `nvidia` driver.

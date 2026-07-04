@@ -57,7 +57,7 @@ NVRM: GPU 0000:82:00.0: RmInitAdapter failed! (0x61:0x56:2074)
 1. **发现拓扑**：收集系统上所有 NVIDIA GPU 的上游 PCIe 桥接器。
 2. **清理进程与移除设备**：强制停止所有正在使用 GPU 的进程，并将显卡对应的 PCIe 设备从内核中强行拔除（`echo 1 > remove`）。
 3. **卸载内核模块**：卸载庞大的 `nvidia` 内核模块家族。
-4. **SBR 重置**：利用 `setpci` 向这些上游桥接器发送真正的 **Secondary Bus Reset (SBR)** 信号，成功清空锁死的 WPR2 安全区。
+4. **SBR & FLR 双重重置**：利用 `setpci` 向这些上游桥接器发送 **Secondary Bus Reset (SBR)** 信号，紧接着对所有 NVIDIA 设备执行 **Function Level Reset (FLR)**，确保完美清空所有型号 GPU 锁死的 WPR2 安全区。
 5. **通用 ReBAR 恢复**：重新扫描 PCIe 总线并调用 `native_resize_bar.sh`。该脚本能够动态探测硬件支持矩阵，并通过 Linux 内核原生的 `resourceX_resize` sysfs 接口，为您的显卡分配绝对最大的 BAR 空间（例如为 5060 Ti 分配 16GB，为 PRO 6000 分配 128GB）。
 6. **通用校验**：通过解析 `lspci -v` 获取底层总线结构，确保 CPU 端的 PCI 物理内存分配已精确兑现每张显卡的 Gigabyte 级容量请求。
 7. **重载与绑定驱动**：重新加载驱动程序，并通过强制将重启后的设备硬绑定回 `nvidia` 驱动，修复了 Linux udev 热插拔扫描的盲区。
